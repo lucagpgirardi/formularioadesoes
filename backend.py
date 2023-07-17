@@ -20,7 +20,7 @@ app.config['DROPZONE_UPLOAD_ACTION'] = 'upload'  # URL do endpoint para processa
 dropzone = Dropzone(app)
 
 # Configuração para a sessão
-app.secret_key = 'sua_chave_secreta_aqui'
+app.secret_key = 'testebackend'
 
 # Dicionário para armazenar os usuários e senhas (substitua com seus próprios usuários)
 usuarios = {
