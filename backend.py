@@ -12,10 +12,10 @@ app.config['DROPZONE_ALLOWED_FILE_TYPE'] = 'image/*'
 app.config['DROPZONE_MAX_FILE_SIZE'] = 16
 app.config['DROPZONE_MAX_FILES'] = 10
 app.config['DROPZONE_UPLOAD_MULTIPLE'] = True
-app.config['DROPZONE_PARALLEL_UPLOADS'] = 3
+app.config['DROPZONE_PARALLEL_UPLOADS'] = 10
 app.config['DROPZONE_TIMEOUT'] = 5 * 60 * 1000  # 5 minutes
 app.config['DROPZONE_UPLOAD_ON_CLICK'] = True
-app.config['DROPZONE_UPLOAD_ACTION'] = 'upload'  # URL do endpoint para processar o upload
+app.config['DROPZONE_UPLOAD_ACTION'] = 'upload'
 
 dropzone = Dropzone(app)
 
@@ -25,7 +25,8 @@ app.secret_key = 'testebackend'
 # Dicionário para armazenar os usuários e senhas (substitua com seus próprios usuários)
 usuarios = {
     'luca': '$2b$12$UaN32w9XLCDT5.YCAVDuMeDRH7xMA3VUHMA7JA93K3WArZcEE074m',
-    'sueli': '$2b$12$x2r3Tz.QTDj392O54nHVvO2xPpcePECSO2aweIxCFa6L4gHO1XI/G'
+    'sueli': '$2b$12$x2r3Tz.QTDj392O54nHVvO2xPpcePECSO2aweIxCFa6L4gHO1XI/G',
+    'allan': '$2b$12$xxW7e6ccfJ6DhM4HWfCAS.VLuOT2czkGONs/gQxXvz7YOsvayCgwe'
 }
 
 def verificar_autenticacao(f):
@@ -69,7 +70,7 @@ def formulario():
 @app.route('/processar_formulario', methods=['POST'])
 @verificar_autenticacao
 def processar_formulario():
-    print("Iniciando processamento do formulário...")
+  
 
     oficial = request.form['oficial']
     rua = request.form['rua']
@@ -94,11 +95,6 @@ def processar_formulario():
     abastecimento = request.form['abastecimento']
     ligacao_esgoto = request.form['ligacao_esgoto']
 
-    print("Oficial:", oficial)
-    print("Rua:", rua)
-    print("Número:", numero)
-    print("Complemento:", complemento)
-    print("Região:", regiao)
 
     # Criação das pastas com base nos dados do formulário
     destino = os.path.join(regiao, rua, numero, complemento)
@@ -108,19 +104,18 @@ def processar_formulario():
     # Verifica se o formulário possui arquivos de imagem
     if 'file' in request.files:
         imagens = request.files.getlist('file')
-        print("Número de imagens:", len(imagens))
+        
 
         for i, imagem in enumerate(imagens):
             nome_arquivo = imagem.filename
-            print(f"Imagem {i + 1} - Nome do arquivo:", nome_arquivo)
             caminho_final = os.path.join(destino, nome_arquivo)
-            print(f"Imagem {i + 1} - Caminho final:", caminho_final)
             imagem.save(caminho_final)
 
     # Salva os dados em um arquivo CSV
     dados = [oficial, rua, numero, complemento, regiao, rgi, hidrometro, inspecao, cliente, relacionamento,
              profissao, nacionalidade, estado_civil, telefone, rg, cpf, data_nascimento, hd, leitura_hd,
              abastecimento, ligacao_esgoto]
+
     salvar_dados_csv(dados)
 
     return render_template('formulario.html', success=True)
@@ -146,8 +141,17 @@ def salvar_dados_csv(dados):
                              'Nacionalidade', 'Estado Civil', 'Telefone Celular', 'RG', 'CPF', 'Data de Nascimento',
                              'Existe HD no local?', 'Leitura do HD', 'Abastecimento normal?', 'Ligação de Esgoto'])
 
-        writer.writerow(dados)
+        # Verifica se há imagens no formulário
+        if 'file' in request.files:
+            imagens = request.files.getlist('file')
+            num_imagens = len(imagens)
+        else:
+            num_imagens = 0
 
+        # Adiciona o número de imagens ao início dos dados
+        dados.insert(0, num_imagens)
+
+        writer.writerow(dados)
 
 if __name__ == '__main__':
     app.run(debug=True)

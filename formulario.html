@@ -2,11 +2,75 @@
 <html>
 <head>
   <title>Formulário</title>
+  <style>
+    /* JÁ QUE O CSS DAVA ERRO QUANDO EU PUXAVA VIA HREF, COLOQUEI ESSA LIXEIRA AQ */
+    .form-group label {
+        font-size: 20px;
+    }
+
+    .form-group input[type="text"],
+    .form-group select,
+    .form-group input[type="date"] {
+        font-size: 15px;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .form-group button {
+        font-size: 20px;
+        padding: 15px 30px;
+        box-sizing: border-box;
+    }
+
+    /* Estilos para botões de envio */
+    .form-group .btn-upload {
+        font-size: 20px;
+        padding: 15px 30px;
+        box-sizing: border-box;
+    }
+
+    .form-group .btn-submit {
+        font-size: 20px;
+        padding: 15px 30px;
+        box-sizing: border-box;
+        margin: 0 auto;
+        display: block;
+        text-align: center;
+    }
+
+    /* Estilos para o título do formulário */
+    h1 {
+        text-align: center;
+    }
+
+    /* Estilos para telas menores */
+    @media screen and (max-width: 1000px) {
+        .form-group label {
+            font-size: 30px;
+        }
+
+        .form-group input[type="text"],
+        .form-group select,
+        .form-group input[type="date"] {
+            font-size: 30px;
+            padding: 15px;
+        }
+
+        .form-group button,
+        .form-group .btn-upload,
+        .form-group .btn-submit {
+            font-size: 30px;
+            padding: 20px 40px;
+        }
+    }
+  </style>
   <link href="https://cdn.jsdelivr.net/npm/dropzone@5.9.2/dist/dropzone.min.css" rel="stylesheet">
+</head>
 <body>
   <h1>Formulário</h1>
   
-  <form action="/processar_formulario" method="post" enctype="multipart/form-data" class="dropzone">
+  <form action="/processar_formulario" method="post" enctype="multipart/form-data">
     <div class="form-group">
       <label for="oficial">Oficial:</label>
       <select id="oficial" name="oficial" required>
@@ -15,9 +79,10 @@
         <option value="Jenefer">Jenefer</option>
         <option value="Alexandre">Alexandre</option>
         <option value="Joyce">Joyce</option>
+        <option value="Luca">Luca</option>
       </select>
     </div>
-    
+
     <div class="form-group">
       <label for="rua">Nome da Rua:</label>
       <input type="text" id="rua" name="rua" required>
@@ -39,6 +104,7 @@
         <option value="">Selecione</option>
         <option value="Santo Amaro">Santo Amaro</option>
         <option value="Vila Santa Inês">Vila Santa Inês</option>
+        <option value="Vila Zelina">Vila Zelina</option>
       </select>
     </div>
     
@@ -167,6 +233,11 @@
         <option value="Sim">Sim</option>
         <option value="Não">Não</option>
       </select>
+    </div>
+
+     <div class="form-group">
+      <label for="file">Imagens:</label>
+      <input type="file" id="file" name="file" multiple>
     </div>
     
     <button type="submit">Enviar</button>
