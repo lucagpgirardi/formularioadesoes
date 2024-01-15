@@ -5,5 +5,3 @@ python -m pip install flask-dropzone
 python -m pip install bcrypt
 
 3. Pra rodar: abre o terminal na pasta que ta o backend.py e digita python backend.py no terminal
-
-4. Pra fazer login: user - allan; senha: allanhal
